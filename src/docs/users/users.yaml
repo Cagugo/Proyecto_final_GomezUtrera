@@ -1,0 +1,158 @@
+paths:
+  /api/users/:
+    get:
+      summary: 'Obtener datos principales de todos los usuarios'
+      description: 'Role/s requerido/s: ADMIN'
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+        '500':
+          $ref: '#/components/responses/500ServerError'
+
+  /api/users/getusers:
+    get:
+      summary: 'Obtener lista paginada de usuarios'
+      description: 'Role/s requerido/s: ADMIN'
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      parameters:
+        - name: limit
+          in: query
+          description: 'Número máximo de usuarios a devolver por página'
+          schema:
+            type: integer
+            example: 10
+        - name: page
+          in: query
+          description: 'Número de página'
+          schema:
+            type: integer
+            example: 1
+        - name: query
+          in: query
+          description: 'Filtrar usuarios por rol (admin, user, premium)'
+          schema:
+            type: string
+            example: 'admin'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+        '500':
+          $ref: '#/components/responses/500ServerError'
+
+  /api/users/{uid}:
+    get:
+      summary: 'Obtener información detallada de un usuario por ID'
+      description: 'Role/s requerido/s: ADMIN'
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/userIdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+        '500':
+          $ref: '#/components/responses/500ServerError'
+
+    put:
+      summary: 'Actualizar información de un usuario por ID'
+      description: 'Role/s requerido/s: ADMIN'
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/userIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                email:
+                  type: string
+                age:
+                  type: integer
+                password:
+                  type: string
+                role:
+                  type: string
+              example:
+                first_name: 'NuevoNombre'
+                last_name: 'NuevoApellido'
+                email: 'nuevo@correo.com'
+                age: 30
+                password: 'nuevacontraseña'
+                role: 'admin'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+        '500':
+          $ref: '#/components/responses/500ServerError'
+
+    delete:
+      summary: 'Eliminar un usuario por ID'
+      description: 'Role/s requerido/s: ADMIN'
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/userIdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500ServerError'
+
+  /api/users/register:
+    post:
+      summary: 'Registrar un nuevo usuario'
+      description: 'Role/s requerido/s: PUBLIC'
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                email:
+                  type: string
+                age:
+                  type: integer
+                password:
+                  type: string
+              example:
+                first_name: 'Nombre'
+                last_name: 'Apellido'
+                email: 'correo@correo.com'
+                age: 35
+                password: '1111'
+      responses:
+        '201':
+          $ref: '#/components/responses/201Created'
+        '500':
+          $ref: '#/components/responses/500ServerError'

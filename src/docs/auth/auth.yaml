@@ -1,0 +1,53 @@
+paths:
+  /api/session/auth/login:
+    post:
+      summary: User Login
+      description: 'Role/s requerido/s: PUBLIC'
+      security:
+        - bearerAuth: []
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              regularUser:
+                summary: Login as a regular user
+                value:
+                  email: 'user@correo.com'
+                  password: '1234'
+
+              premiumUser:
+                summary: Login as a premium user
+                value:
+                  email: 'premium@correo.com'
+                  password: '1234'
+
+              adminUser:
+                summary: Login as an admin
+                value:
+                  email: 'admin@correo.com'
+                  password: '1234'
+
+      responses:
+        200:
+          $ref: '#/components/responses/200Success'
+        500:
+          $ref: '#/components/responses/500ServerError'
+      x-codegen-roles:
+        - PUBLIC
+
+  /api/session/auth/logout:
+    get:
+      summary: Logout
+      description: 'Role/s requerido/s: PUBLIC'
+      security:
+        - bearerAuth: []
+      tags:
+        - Auth
+      responses:
+        200:
+          $ref: '#/components/responses/200Success'
+        500:
+          $ref: '#/components/responses/500ServerError'

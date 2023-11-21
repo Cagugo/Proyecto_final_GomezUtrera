@@ -1,0 +1,210 @@
+components:
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      in: cookie
+      name: jwt
+
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        userId:
+          type: string
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              productId:
+                type: string
+              quantity:
+                type: integer
+      required:
+        - name
+        - userId
+        - products
+
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        code:
+          type: string
+        price:
+          type: number
+        stock:
+          type: integer
+        category:
+          type: string
+        thumbnails:
+          type: array
+          items:
+            type: string
+        owner:
+          type: object
+          properties:
+            id:
+              type: string
+            role:
+              type: string
+      required:
+        - title
+        - description
+        - code
+        - price
+        - stock
+        - category
+
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        age:
+          type: number
+        password:
+          type: string
+        role:
+          type: string
+          description: 'Puede ser admin, user o premium'
+        platform:
+          type: string
+          description: 'Puede ser github o direct'
+        cart:
+          type: string
+          description: 'ID del carrito asignado al usuario'
+        documents:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              reference:
+                type: string
+              mimetype:
+                type: string
+              fieldname:
+                type: string
+                description: 'Puede ser identificación, comprobante de domicilio, comprobante de estado de cuenta o documento'
+        last_connection:
+          type: string
+          format: date-time
+        token:
+          type: string
+        documents_status:
+          type: string
+          description: 'Puede ser pending o upload'
+        premium_documents_status:
+          type: string
+          description: 'Puede ser pending o upload'
+        products:
+          type: array
+          items:
+            type: string
+          description: 'Lista de IDs de productos asociados'
+      required:
+        - first_name
+        - email
+        - password
+
+  parameters:
+    productIdParam:
+      name: pid
+      in: path
+      required: true
+      description: ID del producto (ObjectId de MongoDB)
+      schema:
+        type: string
+        format: objectid
+
+    cartIdParam:
+      name: cid
+      in: path
+      required: true
+      description: ID del carrito (ObjectId de MongoDB)
+      schema:
+        type: string
+        format: objectid
+
+    userIdParam:
+      name: uid
+      in: path
+      required: true
+      description: ID del usuario (ObjectId de MongoDB)
+      schema:
+        type: string
+        format: objectid
+
+  responses:
+    200Success:
+      description: Respuesta exitosa
+      content:
+        application/json:
+          example:
+            success: true
+            data: {}
+
+    201Created:
+      description: Recurso creado exitosamente
+      content:
+        application/json:
+          example:
+            success: true
+            data:
+              id: ResourceID
+              message: 'Recurso creado exitosamente'
+
+    400BadRequest:
+      description: Solicitud incorrecta
+      content:
+        application/json:
+          example:
+            success: false
+            error: 'Bad Request'
+      x-codegen-response-handler: sendUserError
+
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          example:
+            success: false
+            error: 'Unauthorized'
+      x-codegen-response-handler: sendUnauthorized
+
+    404NotFound:
+      description: Recurso no encontrado
+      content:
+        application/json:
+          example:
+            success: false
+            error: 'Not Found'
+      x-codegen-response-handler: sendNotFound
+
+    500ServerError:
+      description: Error interno del servidor
+      content:
+        application/json:
+          example:
+            success: false
+            error: 'Internal Server Error'
+      x-codegen-response-handler: sendServerError

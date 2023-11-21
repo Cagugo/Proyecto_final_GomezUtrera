@@ -1,0 +1,93 @@
+paths:
+  /api/carts/:
+    get:
+      summary: 'Obtener carritos'
+      description: 'Role/s requerido/s: ADMIN, PREMIUM'
+      security:
+        - bearerAuth: []
+      tags:
+        - Carts
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+        '500':
+          $ref: '#/components/responses/500ServerError'
+
+  /api/carts/{cid}:
+    get:
+      summary: 'Obtener productos de un carrito por ID'
+      description: 'Role/s requerido/s: ADMIN'
+      security:
+        - bearerAuth: []
+      tags:
+        - Carts
+      parameters:
+        - $ref: '#/components/parameters/cartIdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+        '500':
+          $ref: '#/components/responses/500ServerError'
+
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: 'Agregar un producto a un carrito por ID'
+      description: 'Role/s requerido/s: USER, PREMIUM'
+      security:
+        - bearerAuth: []
+      tags:
+        - Carts
+      parameters:
+        - $ref: '#/components/parameters/cartIdParam'
+        - $ref: '#/components/parameters/productIdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+        '500':
+          $ref: '#/components/responses/500ServerError'
+
+    put:
+      summary: 'Actualizar la cantidad de un producto en un carrito por ID'
+      description: 'Role/s requerido/s: ADMIN, PREMIUM'
+      security:
+        - bearerAuth: []
+      tags:
+        - Carts
+      parameters:
+        - $ref: '#/components/parameters/cartIdParam'
+        - $ref: '#/components/parameters/productIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  description: 'La nueva cantidad de productos en el carrito'
+                  example: 1
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+        '500':
+          $ref: '#/components/responses/500ServerError'
+      x-codegen-roles:
+        - USER
+        - PREMIUM
+
+    delete:
+      summary: 'Eliminar un producto de un carrito por ID'
+      description: 'Role/s requerido/s: ADMIN, USER, PREMIUM'
+      security:
+        - bearerAuth: []
+      tags:
+        - Carts
+      parameters:
+        - $ref: '#/components/parameters/cartIdParam'
+        - $ref: '#/components/parameters/productIdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+        '500':
+          $ref: '#/components/responses/500ServerError'

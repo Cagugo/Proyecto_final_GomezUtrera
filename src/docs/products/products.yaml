@@ -1,0 +1,93 @@
+
+paths:
+  /api/products/:
+    get:
+      summary: 'Obtener productos'
+      description: 'Role/s requerido/s: ADMIN, PREMIUM'
+      security:
+        - bearerAuth: []
+      tags:
+        - Products
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+        '500':
+          $ref: '#/components/responses/500ServerError'
+      x-codegen-roles:
+
+  /api/products/{pid}:
+    get:
+      summary: 'Obtener producto por ID'
+      description: 'Role/s requerido/s: ADMIN'
+      security:
+        - bearerAuth: []
+      tags:
+        - Products
+      parameters:
+        - $ref: '#/components/parameters/productIdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+        '500':
+          $ref: '#/components/responses/500ServerError'
+
+    put:
+      summary: 'Actualizar producto por ID'
+      description: 'Role/s requerido/s: ADMIN, PREMIUM'
+      security:
+        - bearerAuth: []
+      tags:
+        - Products
+      parameters:
+        - $ref: '#/components/parameters/productIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 'El nuevo título del producto'
+                  example: 'Nuevo título'
+                description:
+                  type: string
+                  description: 'La nueva descripción del producto'
+                  example: 'Nueva descripción'
+                code:
+                  type: string
+                  description: 'El nuevo código del producto'
+                  example: '12345'
+                price:
+                  type: number
+                  description: 'El nuevo precio del producto'
+                  example: 20.0
+                stock:
+                  type: integer
+                  description: 'La nueva cantidad en stock del producto'
+                  example: 105
+                category:
+                  type: string
+                  description: 'La nueva categoría del producto'
+                  example: 'Electronics'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+        '500':
+          $ref: '#/components/responses/500ServerError'
+
+    delete:
+      summary: 'Eliminar producto por ID'
+      description: 'Role/s requerido/s: ADMIN, PREMIUM'
+      security:
+        - bearerAuth: []
+      tags:
+        - Products
+      parameters:
+        - $ref: '#/components/parameters/productIdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Success'
+        '500':
+          $ref: '#/components/responses/500ServerError'
